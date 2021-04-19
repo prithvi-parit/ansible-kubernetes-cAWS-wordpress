@@ -1,0 +1,55 @@
+- hosts: localhost
+  vars_files:
+          - mys.yml
+  tasks:
+          - community.aws.ec2_instance:
+                name: "master"
+                key_name: "awscloud2020"
+                vpc_subnet_id: subnet-c8626ba0
+                instance_type: t2.micro
+                security_group: launch-wizard-29
+                state: present
+                image_id: ami-022983c7f3ead69d4
+                aws_access_key: "{{ u }}"
+                aws_secret_key: "{{ p }}"
+                region: "ap-south-1"
+            register: x
+
+          - debug:
+                  var: x.instances[0].network_interfaces[0].association.public_ip
+
+
+          - community.aws.ec2_instance:
+                name: "slave-1"
+                key_name: "awscloud2020"
+                vpc_subnet_id: subnet-c8626ba0
+                instance_type: t2.micro
+                security_group: launch-wizard-29
+                state: present
+                image_id: ami-022983c7f3ead69d4
+                aws_access_key: "{{ u }}"
+                aws_secret_key: "{{ p }}"
+                region: "ap-south-1"
+            register: y
+
+          - debug:
+                  var: y.instances[0].network_interfaces[0].association.public_ip
+
+          - community.aws.ec2_instance:
+                name: "slave-2"
+                key_name: "awscloud2020"
+                vpc_subnet_id: subnet-c8626ba0
+                instance_type: t2.micro
+                security_group: launch-wizard-29
+                state: present
+                image_id: ami-022983c7f3ead69d4
+                aws_access_key: "{{ u }}"
+                aws_secret_key: "{{ p }}"
+                region: "ap-south-1"
+            register: z
+
+          - debug:
+                  var: z.instances[0].network_interfaces[0].association.public_ip
+          - template:
+                  src: /ws1/ws1.1/ip.txt
+                  dest: /root/ip.txt
