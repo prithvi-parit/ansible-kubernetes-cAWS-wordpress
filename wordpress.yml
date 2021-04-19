@@ -1,0 +1,12 @@
+- hosts: master
+  tasks:
+          - shell:
+             cmd: kubectl apply  -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+
+
+          - shell:
+                  cmd: kubectl run mydb --image=mysql:5.7 --env=MYSQL_ROOT_PASSWORD=redhat  --env=MYSQL_DATABASE=wpdb  --env=MYSQL_USER=prithvi  --env=MYSQL_PASSWORD=redhat
+          - shell:
+                  cmd: kubectl run mywp1 --image=wordpress:5.1.1-php7.3-apache
+          - shell:
+               cmd: kubectl expose pod mywp1 --type=NodePort --port=80
