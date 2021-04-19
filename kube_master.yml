@@ -1,0 +1,21 @@
+- hosts: master
+  tasks:
+          - shell: echo 1 >  /proc/sys/net/bridge/bridge-nf-call-iptables
+
+          - template:
+                  src: /ws1/ws1.1/master_content.txt
+                  dest: /etc/docker/file.txt
+
+          - script:
+                  cmd: /ws1/ws1.1/master_content.txt
+
+          - command: "kubeadm token create --print-join-command"
+            register: x
+
+          - debug:
+                  msg: "{{ x.stdout_lines[0] }}"
+
+          - template:
+                  src: /ws1/ws1.1/join1.yml
+                  dest: /ws1/ws1.1/join2.txt
+            delegate_to: 127.0.0.1
